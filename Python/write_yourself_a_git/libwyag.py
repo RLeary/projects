@@ -329,3 +329,81 @@ def object_has(fd, fmt, repo=None):
         raise Exception("Unkown type %s" % fmt)
 
     return object_write(obj, repo)
+
+def kvlm_parse(raw, start=0, dct=None):
+    if not dct:
+        dct = collections.OrderedDict()
+        # You CANNOT declare the argument as dct=OrderedDict() or all
+        # call to the functions will endlessly grow the same dict.
+
+    # we search for the next space and the next newline
+    spc = raw.find(b' ', start)
+    nl = raw.find(b'\n', start)
+
+    # if space appears before newline, we have a keyword
+
+    # base case
+    # if newline appears first (or there's no space at all, in which
+    # case find returns -1), we assume a blank line.  A blank line
+    # means the remainder of the data is the message.
+    if (spc < 0) or (nl < spc):
+        assert(nl == start)
+        dct[b''] = raw[start+1:]
+        return dct
+
+    # recursive case
+    # we read a key-value pair and recurse for the next.
+    key = raw[start:spc]
+
+    # find the end of the value. Continuation lines begin with a 
+    # space, so we loop until we find a '\n' not followed by a space
+    end = start
+    while True:
+        end = raw.find(b'\n', end+1)
+        if raw[end+1] != ord(' '):
+            break
+    
+    # grab the value
+    # also drop the leading space on continuation lines
+    value = raw[spc+1:end].replace(b'\n 'm b'\n')
+
+    # dont overwrite existing data contents
+    if key in dct:
+        if type(dct[key]) == list:
+            dct[key].append(value)
+        else:
+            dct[key] = [ dct[key], value ]
+    else:
+        dct[key] = value
+
+    return kvlm_parse(raw, start=end+1, dct=dct)
+
+def kvlm_serialize(kvlm):
+    ret = b''
+
+    # output fields
+    for k in kvlm.keys():
+        # skip the message itself
+        if k == b'':
+            continue
+        val = kvlm[k]
+        # normalise to a list
+        if type(val) != list:
+            val = [ val ]
+
+        for v in val:
+            ret += k + b' ' +(v.replace(b'\n ', b'\n')) + b'\n'
+        
+    # append message
+    ret += b'\n' + kvlm[b'']
+
+    return ret
+
+class GitCommit(GitObject):
+    fmt = b'commit'
+    
+    def deserialize(self, data):
+        self.kvlm = kvlm_parse(data)
+
+    def serialize(self):
+        return kvlm_serialize(self.kvlm)
