@@ -2,7 +2,7 @@ import agparse # parse command line args
 import collections # for OrderedDict
 import configparser # read and write the git config files
 import hashlib # for SHA-1
-import os
+import os # for path
 import re
 import sys # to access the command line arguments
 import zlib # git uses zlib for compression
@@ -145,3 +145,36 @@ def repo_default_config():
     ret.set("core", "bare", "false")
 
     return ret
+
+argsp = argsubparsers.add_parser("init", help="Initialize a new, empty repository")
+
+argsp.add_argument("path",
+                    metavar="directory",
+                    nargs="?",
+                    default="."
+                    help="Where to create the repository")
+
+def cmd_init(args):
+    repo_create(args.path)
+
+
+def repo_find(path=".", required=True):
+    """ find the dir with .git"""
+    path = os.path.realpath(path)
+
+    if os.path.isdir(os.path.join(path, ".git")):
+        return GitRepository(path)
+
+    parent = os.path.realpath(os.path.join(path, ".."))
+
+    if parent == path:
+        # Bottom case
+        # os.path.join("/", "..") == ""
+        # if parent == path, then path is root
+        if required:
+            raise Exception("No git repository")
+        else:
+            return None
+    
+    # Recusive case
+    return repo_find(parent, required)
