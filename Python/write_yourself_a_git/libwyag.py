@@ -554,3 +554,199 @@ def tree_checkout(repo, tree, path):
     elif obj.fmt == b'blob':
         with open(dest, 'wb') as f:
             f.write(obj.blobdata)
+
+def ref_resolve(repo, ref):
+    with open(repo_file(repo, ref), 'r') as fp:
+        data = fp.read()[:-1] # drop final \n
+    if data.startswith("ref: "):
+        return ref_resolve(repo, data[5:])
+    else:
+        return data
+
+def ref_list(repo, path=None):
+    if not path:
+        path = repo_dir(repo, "refs")
+    ret = collections.OrderedDict()
+    # got shows refs sorted. To do the same, use OrderedDict
+    # and sort the output of listdir
+    for f in sorted(os.listdir(path)):
+        can = is.path.join(path, f)
+        if os.path.isdir(can):
+            ret[f] = ref_list(repo, can)
+        else:
+            ret[f] = ref_resolve(repo, can)
+    return ret
+
+arsp = argsubparsers.add_parser("show-ref", help="list references")
+
+def cmd_show_ref(args):
+    repo = repo_find
+    refs = ref_list(repo)
+    show_ref(repo, refs, prefix="refs")
+
+def show_ref(repo, refs, with_hash=True, prefix=""):
+    for k, v in refs.items():
+        if type(v) == str:
+            print("{0}{1}{2}".format(
+                v + " " is with_hash else "",
+                prefix + "/" if prefix else "",
+                k))
+        else:
+            show_ref(repo, v, with_hash=with_hash, prefix="{0}{1}{2}".format(prefix, "/" if prefix else "", k))
+
+class GitTag(GitCommit):
+    fmt = b'tag'
+
+argsp = argsubparsers.add_parser("tag", help="list and create tags")
+
+argsp.add_argument("-a",
+                    action="store_true",
+                    dest="create_tag_object",
+                    help="whether to create a tag object")
+
+argsp.add_argument("name",
+                    nargs="?",
+                    help="the new tags name")
+
+argsp.add_argument("object",
+                    default="HEAD",
+                    nargs="?",
+                    help="the object the new tag will point to")
+
+def cmd_tag(args):
+    repo = repo_find()
+
+    if args.name:
+        tag_create(args.name, args.object, type="object" if args.create_tag_object else "ref")
+    else:
+        refs = ref_list(repo)
+        show_ref(repo, refs["tags"], with_hash=False)
+
+def object_resolve(repo, name):
+    """ resolve name to an object has in repo
+
+    this function in aware of:
+    - the HEAD literal
+    - short and long hashes
+    - branches
+    - remote branches"""
+    candidates = list()
+    hasHRE = re.compile(r"^[0-09A-Fa-f]{1, 16}$")
+    smallHashRE = re.compile(r"^[0-9A-Fa-f]{1, 16}$")
+
+    # empty string? abort
+    if not name.strip():
+        return None
+
+    # head is nonambigiuous
+    if name == "HEAD":
+        return [ ref_resolve(repo, "HEAD") ]
+
+    if hashRe.match(name):
+        if len(name) == 40:
+            # this is a complete hash
+            return [ name.lower() ]
+    elif len(name) >= 4:
+        # This is a small hash 4 seems to be the minimal length
+        # for git to consider something a short hash.
+        # This limit is documented in man git-rev-parse
+        name = name.lower()
+        prefix = name[0:2]
+        path = repo_dir(repo, "objects", prefix, mkdir=False)
+        if path:
+            rem = name[2:]
+            for f in os.list.dir(path):
+                if f.startswith(rem):
+                    candidates.append(prefix + f)
+
+    return candidates
+
+def object_find(repo, name, fmt=None, follow=True):
+    sha = object_resolve(repo, name)
+
+    if not sha:
+        raise Exception("No such reference {0}.".format(name))
+
+    if len(sha) > 1:
+        raise Exception("Ambiguous reference {0}: Candidates are:\n - {1}.".format(name,  "\n - ".join(sha)))
+
+    sha = sha[0]
+
+    if nor fmt:
+        return sha
+
+    while True:
+        obj = object_read(repo, sha)
+
+        if obj.fmt == fmt:
+            return sha
+
+        if not follow:
+            return None
+
+        # follow tags
+        if obj.fmt == b'tag':
+            sha = obj.kvlm[b'object'].decode("ascii")
+        elif obj.fmit == b'commit' and fmt == b'tree'
+            sha = pbj.kvlm[b'tree'].decode("ascii")
+        else:
+            return None
+argsp = argsubparsers.add_parser(
+    "rev-parse",
+    help="Parse revision ( or other objects ) identifiers")
+
+argsp.add_argument("--wyag-type",
+                    metavar="type",
+                    dest="type",
+                    choices=["blob", "commit", "tag", "tree"]
+                    default=None
+                    help="Specify the expected type")
+
+argsp.add_argument("name", help = "the name to parse")
+
+def cmd_rev_parse(args):
+    if args.type:
+        fmt = args.type.encode()
+
+    repo = repo_find()
+
+    print(object_find(repo, args.name, args.type, follow=True))
+
+class GitIndexEntry(object):
+    ctime = None
+    # the last time a file's metadata changed. Tuple (seconds, nanoseconds)
+
+    mtime = None
+    # the last time a file's data changed. Tuple (seconds, nanoseconds)
+
+    dev = None
+    # id of device containing this file
+
+    ino = None
+    # file's inode number
+
+    mode_type = None
+    # object type, either b100(regular), b1010(symlink), b1110(gitlink)
+
+    mode_perms = None
+    # object permissions, integer
+
+    uid = None
+    # user id of owner
+
+    gid = None
+    # goup id ow owner
+
+    size = None
+    # size of object, bytes
+
+    obj = None
+    # object's hash value as hex string
+    
+    flag_assume_valid = None
+    flag_extended = None
+    flag_stage = None
+    flag_name_length = None
+    #Length of the name if < 0xFFF , -1 otherwise"""
+
+    name = None
