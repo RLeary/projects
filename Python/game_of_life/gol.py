@@ -79,4 +79,14 @@ def render(board):
     print("\n".join(lines))
     print(horizontal_outline)
 
-render(random_state(width, height))
+# render(random_state(width, height))
+
+# takes a given board state, then calculate and return th next state
+# according to the rules of GOL:
+#   a cell with:
+#       0 or 1 neighbours - dies
+#       2 or 3 neighbours - lives
+#       >3 neighbours - dies
+#       dead with 3 neighbours - born
+def next_board_state(board):
+    pass
