@@ -8,6 +8,7 @@
 # 4. Any dead cell with exactly 3 live neighbors becomes alive, by reproduction
 
 import random
+import time
 
 DEAD = 0
 LIVE = 1
@@ -136,3 +137,22 @@ def next_cell_value(coord, board):
             return LIVE
         else:
             return DEAD
+
+def eternal_life(board):
+    next_board = board
+    while True:
+        render(next_board)
+        next_board = next_board_state(next_board)
+        time.sleep(.3)
+
+"""
+if __name__ == "main":
+    width = 12
+    height = 12
+    init_board = random_state(width, height)
+
+    eternal_life(init_board)
+    """
+
+init_board = random_state(width, height)
+eternal_life(init_board)
