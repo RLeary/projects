@@ -17,6 +17,7 @@ height = 8
 
 # returns a board of width x height, all dead cells
 def dead_state(width, height):
+    """
     board = list()
     for i in range(height):
         row = list()
@@ -25,9 +26,9 @@ def dead_state(width, height):
         board.append(row)
          
     return board
-    
+    """
     # list comprehension - better way
-    #return [[DEAD for x in range(height)] for x in range(width)]
+    return [[DEAD for x in range(height)] for x in range(width)]
 
 # returns a board of width x height, random cell state
 # build board using dead_state(), then randomly assign cell states
@@ -35,8 +36,8 @@ def random_state(width, height):
     board = dead_state(width, height)
 
     # randomise each state
-    for i in range(height):
-        for j in range(width):
+    for i in range(get_board_width(board)):
+        for j in range(get_board_height(board)):
             state = random.randint(0, 1)
             board[i][j] = state
 
@@ -79,7 +80,7 @@ def render(board):
     print("\n".join(lines))
     print(horizontal_outline)
 
-# render(random_state(width, height))
+#render(random_state(width, height))
 
 # takes a given board state, then calculate and return th next state
 # according to the rules of GOL:
@@ -89,4 +90,49 @@ def render(board):
 #       >3 neighbours - dies
 #       dead with 3 neighbours - born
 def next_board_state(board):
-    pass
+    width = get_board_width(board)
+    height = get_board_height(board)
+    next_state = dead_state(width, height)
+
+    for x in range(width):
+        for y in range(height):
+            next_state[x][y] = next_cell_value((x, y), board)
+
+    return next_state
+
+# get the next value of a cell. coord - (x, y) tuple for cell co-ordinates
+# returns LIVE or DEAD based on surrounding cells
+def next_cell_value(coord, board):
+    width = get_board_width(board)
+    height = get_board_height(board)
+    x = coord[0]
+    y = coord[1]
+    live_neighbours = 0
+
+    # iterate around cell neighbours to count live cells
+    for i in range((x-1), (x+1)+1):
+        if i < 0 or i >= width:
+            continue # don't go off the edge
+
+        for j in range((y-1), (y+1)+1):
+            if j < 0 or j >= height:
+                continue # don't go off the edge
+            
+            if i == x and j == y:
+                continue # a cell is not it's own neighbour
+
+            if board[i][j] == LIVE:
+                live_neighbours += 1
+
+    if board[x][y] == LIVE:
+        if live_neighbours <= 1:
+            return DEAD
+        elif live_neighbours <= 3:
+            return LIVE
+        else:
+             return DEAD
+    else:
+        if live_neighbours == 3:
+            return LIVE
+        else:
+            return DEAD

@@ -106,8 +106,8 @@ if __name__ == "__main__":
 
     # TEST 5 - live cells with 0 or 1 live neighbors dies
     init_state_test_5 = [
-        [0, 0, 0, 0],
         [0, 1, 1, 0],
+        [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 1, 0, 0]
     ]
@@ -118,7 +118,7 @@ if __name__ == "__main__":
         [0, 0, 0, 0]
     ]
 
-    actual_next_state_test_ = next_board_state(init_state_test_5)
+    actual_next_state_test_5 = next_board_state(init_state_test_5)
 
     if expected_next_state_test_5 == actual_next_state_test_5:
         print("Passed test 5 - live cells with 0 or 1 neighbours die")
@@ -128,5 +128,3 @@ if __name__ == "__main__":
         print(expected_next_state_test_5)
         print("actual results: ")
         print(actual_next_state_test_5)
-
-# test for corners?, edges?
