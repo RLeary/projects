@@ -70,7 +70,7 @@ def render(board):
         line = str()
         line += '| ' # vertical outline
         for j in range(get_board_width(board)):
-            line += cell_display[board[i][j]] * 2 # without doubling cell_display it look squished
+            line += cell_display[board[j][i]] * 2 # without doubling cell_display it look squished
         line += ' |' # vertical outline
         lines.append(line)
 
@@ -174,13 +174,56 @@ def eternal_life(board):
         next_board = next_board_state(next_board)
         time.sleep(.3)
 
-if __name__ == "__main__":
-    #load_file = None
-    # windows not liking relative paths:
+def print_start_menu():
+    print("Game of Life")
+    print("------------")
+    print("1. Random soup")
+    print("2. Select state to load")
+    print("3. GOL modifiers")
+
+def print_select_state():
+    print("States: ")
+    print("--------")
+    print("1. Toad")
+    print("2. Glider")
+    print("3. Blinker")
+    print("4. Beacon")
+
+def select_load_state():
+    # something is not liking relative paths
     PATH = os.path.dirname(os.path.abspath(__file__))
-    load_file = os.path.join(PATH, 'toad.txt')
-        if not load_file:
+
+    print_select_state()
+
+    state_choice = int(input("Select state to load: "))
+    if state_choice == 1:
+        state_file = os.path.join(PATH, 'toad.txt')
+    elif state_choice == 2:
+        state_file = os.path.join(PATH, 'glider.txt')
+    elif state_choice == 3:
+        state_file = os.path.join(PATH, 'blinker.txt')
+    elif state_choice == 4:
+        state_file = os.path.join(PATH, 'beacon.txt')
+    else:
+        print("invalid choice. Random soup loading")
+        state_file = None
+    
+    return state_file
+
+if __name__ == "__main__":
+    print_start_menu()
+    start_choice = int(input("Select Choice: "))
+
+    if start_choice == 1:
+        state_file = None
+    elif start_choice == 2:
+        state_file = select_load_state()
+    elif start_choice == 3:
+        state_file = None
+        print("not implemented yet, loading random soup")
+
+    if not state_file:
         init_board = random_state(width, height)
     else:
-        init_board = load_board(load_file)
+        init_board = load_board(state_file)
     eternal_life(init_board)
