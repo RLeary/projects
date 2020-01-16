@@ -9,12 +9,13 @@
 
 import random
 import time
+import os # load_board() not liking relative paths
 
 DEAD = 0
 LIVE = 1
 
-width = 10
-height = 8
+width = 36
+height = 22
 
 # returns a board of width x height, all dead cells
 def dead_state(width, height):
@@ -69,7 +70,7 @@ def render(board):
         line = str()
         line += '| ' # vertical outline
         for j in range(get_board_width(board)):
-            line += cell_display[board[j][i]] * 2 # without doubling cell_display it look squished
+            line += cell_display[board[i][j]] * 2 # without doubling cell_display it look squished
         line += ' |' # vertical outline
         lines.append(line)
 
@@ -98,16 +99,12 @@ def next_board_state(board):
     for x in range(width):
         for y in range(height):
             next_state[x][y] = next_cell_value((x, y), board)
-
     return next_state
 
-# get the next value of a cell. coord - (x, y) tuple for cell co-ordinates
-# returns LIVE or DEAD based on surrounding cells
-def next_cell_value(coord, board):
+# returns the number os live neighbours a cell has
+def get_live_neighbours(x, y, board):
     width = get_board_width(board)
     height = get_board_height(board)
-    x = coord[0]
-    y = coord[1]
     live_neighbours = 0
 
     # iterate around cell neighbours to count live cells
@@ -125,6 +122,18 @@ def next_cell_value(coord, board):
             if board[i][j] == LIVE:
                 live_neighbours += 1
 
+    return live_neighbours
+
+# get the next value of a cell. coord - (x, y) tuple for cell co-ordinates
+# returns LIVE or DEAD based on surrounding cells
+def next_cell_value(coord, board):
+    width = get_board_width(board)
+    height = get_board_height(board)
+    x = coord[0]
+    y = coord[1]
+
+    live_neighbours = get_live_neighbours(x, y, board)
+    
     if board[x][y] == LIVE:
         if live_neighbours <= 1:
             return DEAD
@@ -138,6 +147,26 @@ def next_cell_value(coord, board):
         else:
             return DEAD
 
+# load an existing start state
+# file stores as text file, 0 for DEAD, 1 for LIVE
+# eg. 0001
+#     1100
+#     1100
+def load_board(file):
+    board = list()
+    input_file = open(file, 'r')
+    lines = [line.strip() for line in input_file.readlines()]
+    input_file.close()
+
+    height = len(lines)
+    width = len(lines[0])
+    board = dead_state(height, width)
+
+    for x, line in enumerate(lines):
+        for y, char in enumerate(line):
+            board[x][y] = int(char)
+    return board
+
 def eternal_life(board):
     next_board = board
     while True:
@@ -145,14 +174,13 @@ def eternal_life(board):
         next_board = next_board_state(next_board)
         time.sleep(.3)
 
-"""
-if __name__ == "main":
-    width = 12
-    height = 12
-    init_board = random_state(width, height)
-
+if __name__ == "__main__":
+    #load_file = None
+    # windows not liking relative paths:
+    PATH = os.path.dirname(os.path.abspath(__file__))
+    load_file = os.path.join(PATH, 'toad.txt')
+        if not load_file:
+        init_board = random_state(width, height)
+    else:
+        init_board = load_board(load_file)
     eternal_life(init_board)
-    """
-
-init_board = random_state(width, height)
-eternal_life(init_board)
