@@ -97,20 +97,20 @@ def next_board_state(board, mod=None):
     next_state = dead_state(width, height)
 
     if not mod:
-        for x in range(width):
-            for y in range(height):
-                next_state[x][y] = next_cell_value((x, y), board)
-        return next_state
+        born = [3]
+        stay = [2, 3]
     elif mod == 'dani':
-        for x in range(width):
-            for y in range(height):
-                next_state[x][y] = next_cell_value((x, y), board, [3, 6, 7, 8], [3, 4, 6, 7, 8])
-        return next_state
+        born = [3, 6, 7, 8]
+        stay = [3, 4, 6, 7, 8]
     elif mod == 'maze':
-        for x in range(width):
-            for y in range(height):
-                next_state[x][y] = next_cell_value((x, y), board, [3], [1, 2, 3, 4, 5])
-        return next_state
+        born = [3]
+        stay = [1, 2, 3, 4, 5]
+
+    for x in range(width):
+        for y in range(height):
+            next_state[x][y] = next_cell_value((x, y), board, born, stay)
+    
+    return next_state
 
 # returns the number os live neighbours a cell has
 def get_live_neighbours(x, y, board):
@@ -138,7 +138,7 @@ def get_live_neighbours(x, y, board):
 # get the next value of a cell. coord - (x, y) tuple for cell co-ordinates
 # returns LIVE or DEAD based on surrounding cells
 # defaults to classic rules - B3 S23
-def next_cell_value(coord, board, born=[2], stay=[2, 3]):
+def next_cell_value(coord, board, born, stay):
     width = get_board_width(board)
     height = get_board_height(board)
     x = coord[0]
