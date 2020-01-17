@@ -91,15 +91,26 @@ def render(board):
 #       2 or 3 neighbours - lives
 #       >3 neighbours - dies
 #       dead with 3 neighbours - born
-def next_board_state(board):
+def next_board_state(board, mod=None):
     width = get_board_width(board)
     height = get_board_height(board)
     next_state = dead_state(width, height)
 
-    for x in range(width):
-        for y in range(height):
-            next_state[x][y] = next_cell_value((x, y), board)
-    return next_state
+    if not mod:
+        for x in range(width):
+            for y in range(height):
+                next_state[x][y] = next_cell_value((x, y), board)
+        return next_state
+    elif mod == 'dani':
+        for x in range(width):
+            for y in range(height):
+                next_state[x][y] = next_cell_value((x, y), board, [3, 6, 7, 8], [3, 4, 6, 7, 8])
+        return next_state
+    elif mod == 'maze':
+        for x in range(width):
+            for y in range(height):
+                next_state[x][y] = next_cell_value((x, y), board, [3], [1, 2, 3, 4, 5])
+        return next_state
 
 # returns the number os live neighbours a cell has
 def get_live_neighbours(x, y, board):
@@ -126,26 +137,24 @@ def get_live_neighbours(x, y, board):
 
 # get the next value of a cell. coord - (x, y) tuple for cell co-ordinates
 # returns LIVE or DEAD based on surrounding cells
-def next_cell_value(coord, board):
+# defaults to classic rules - B3 S23
+def next_cell_value(coord, board, born=[2], stay=[2, 3]):
     width = get_board_width(board)
     height = get_board_height(board)
     x = coord[0]
     y = coord[1]
 
     live_neighbours = get_live_neighbours(x, y, board)
-    
     if board[x][y] == LIVE:
-        if live_neighbours <= 1:
+        if live_neighbours in stay:
+            return LIVE
+        else:
             return DEAD
-        elif live_neighbours <= 3:
+    else:
+        if live_neighbours in born:
             return LIVE
         else:
              return DEAD
-    else:
-        if live_neighbours == 3:
-            return LIVE
-        else:
-            return DEAD
 
 # load an existing start state
 # file stores as text file, 0 for DEAD, 1 for LIVE
@@ -167,11 +176,11 @@ def load_board(file):
             board[x][y] = int(char)
     return board
 
-def eternal_life(board):
+def eternal_life(board, mod):
     next_board = board
     while True:
         render(next_board)
-        next_board = next_board_state(next_board)
+        next_board = next_board_state(next_board, mod)
         time.sleep(.3)
 
 def print_start_menu():
@@ -188,6 +197,13 @@ def print_select_state():
     print("2. Glider")
     print("3. Blinker")
     print("4. Beacon")
+
+def print_modifier_menu():
+    print("GOL rule modifers: ")
+    print("-------------------")
+    print("1. Classic B3 S23 ")
+    print("2. DANI B3678 S34678")
+    print("3. Maze B3 S12345")
 
 def select_load_state():
     # something is not liking relative paths
@@ -210,20 +226,35 @@ def select_load_state():
     
     return state_file
 
+def select_modifer():
+    mod_choice = int(input("Select modifier: "))
+    if mod_choice == 1:
+        mod = 'classic'
+    elif mod_choice == 2:
+        mod = 'dani'
+    elif mod_choice == 3:
+        mod = 'maze'
+    else:
+        mod = 'classic'
+
+    return mod
+
 if __name__ == "__main__":
+    mod = None
     print_start_menu()
     start_choice = int(input("Select Choice: "))
-
+        
     if start_choice == 1:
         state_file = None
     elif start_choice == 2:
         state_file = select_load_state()
     elif start_choice == 3:
         state_file = None
-        print("not implemented yet, loading random soup")
-
+        print_modifier_menu()
+        mod = select_modifer()
+        
     if not state_file:
         init_board = random_state(width, height)
     else:
         init_board = load_board(state_file)
-    eternal_life(init_board)
+    eternal_life(init_board, mod)
