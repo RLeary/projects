@@ -12,7 +12,6 @@ def new_board():
 # render the board as a 2d grid, rather than printing 
 # [[X, X, None], [O, None, None], O, None, None]] eg
 def render(board):
-    # store board as a list of strings, print out each string
     lines = list()
     for i in range(BOARD_HEIGHT):
         # need line as list - str cant contain None
@@ -42,10 +41,42 @@ def render(board):
         print("%d%s" % (line_no, ' '.join(line_to_output)))
         line_no += 1
     print(horizontal_line)
+    print('\n')
+
+#b1 = new_board()
+#b1[0][2] = 'X'
+#b1[1][1] = 'O'
+#b1[2][1] = 'O'
+#render(b1)
+
+# returns the coordinates of a player's chosen move
+def get_move():
+    x = int(input("Enter your move's X co-ordinate: "))
+    y = int(input("Enter your move's Y co-ordinate: "))
+    # TODO validation
+    return (x, y)
+
+#print(get_move())
+
+# make a single move, and return the updated board state
+def make_move(board, coord, player):
+    new_board_state = new_board()
+    # TODO new_board_state = board
 
 
+    # TODO update board with new move
+    x = coord[0]
+    y = coord[1]
+    new_board_state[x][y] = player
+
+    return new_board_state
 
 b1 = new_board()
-b1[0][2] = 'X'
-b1[1][1] = 'O'
+
+move_coord = (2, 0)
+b1 = make_move(b1, move_coord, "X")
+render(b1)
+
+move_coord_2 = (1, 1)
+b1 = make_move(b1, move_coord_2, "O")
 render(b1)
