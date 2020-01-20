@@ -14,6 +14,7 @@ import os # load_board() not liking relative paths
 DEAD = 0
 LIVE = 1
 
+# these values take up f full windows cmd terminal
 width = 36
 height = 22
 
@@ -176,6 +177,13 @@ def load_board(file):
             board[x][y] = int(char)
     return board
 
+# TODO validate load files
+# only contain 0 or 1
+# all lines equal length
+# maybe put this in separate py file
+def validate_load_file(file):
+    pass
+
 def eternal_life(board, mod):
     next_board = board
     while True:
@@ -197,6 +205,7 @@ def print_select_state():
     print("2. Glider")
     print("3. Blinker")
     print("4. Beacon")
+    print("5. Glider Gun")
 
 def print_modifier_menu():
     print("GOL rule modifers: ")
@@ -220,6 +229,9 @@ def select_load_state():
         state_file = os.path.join(PATH, 'blinker.txt')
     elif state_choice == 4:
         state_file = os.path.join(PATH, 'beacon.txt')
+    elif state_choice == 5:
+        # TODO this loads sideways - not working properly
+        state_file = os.path.join(PATH, 'glider_gun.txt')
     else:
         print("invalid choice. Random soup loading")
         state_file = None
@@ -257,4 +269,5 @@ if __name__ == "__main__":
         init_board = random_state(width, height)
     else:
         init_board = load_board(state_file)
+
     eternal_life(init_board, mod)

@@ -1,8 +1,6 @@
 from gol import next_board_state, dead_state
 
-# TODO: there's a lot of repeated code here. Can
-# you move some of into reusable functions to
-# make it shorter and neater?
+# TODO: lopt of repeated code
 
 if __name__ == "__main__":
     # TEST 1 - dead cells with no live neighbours stay dead
