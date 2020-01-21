@@ -7,20 +7,16 @@ PRINTED_GRID_WIDTH = 14
 def new_board():
     return [[None for x in range(BOARD_HEIGHT)] for x in range(BOARD_WIDTH)]
 
-#print(new_board())
-
 # render the board as a 2d grid, rather than printing 
 # [[X, X, None], [O, None, None], O, None, None]] eg
 def render(board):
     lines = list()
     for i in range(BOARD_HEIGHT):
-        # need line as list - str cant contain None
         line = list()
         for j in range(BOARD_WIDTH):
             line.append(board[j][i])
         lines.append(line)
 
-    #print("\n".join(lines)) cant use join() for lists, need to use for loops
     horizontal_line = str()
     for i in range(PRINTED_GRID_WIDTH):
         horizontal_line += '-'
@@ -43,20 +39,22 @@ def render(board):
     print(horizontal_line)
     print('\n')
 
-#b1 = new_board()
-#b1[0][2] = 'X'
-#b1[1][1] = 'O'
-#b1[2][1] = 'O'
-#render(b1)
-
 # returns the coordinates of a player's chosen move
 def get_move():
-    x = int(input("Enter your move's X co-ordinate: "))
-    y = int(input("Enter your move's Y co-ordinate: "))
-    # TODO validation
+    x = None
+    y = None
+    valid_coords = [0, 1, 2]
+
+    while x not in valid_coords:
+        x = int(input("Enter your move's X co-ordinate(0, 1, or 2): "))
+    while y not in valid_coords:
+        y = int(input("Enter your move's Y co-ordinate(0, 1, or 2): "))
+    
     return (x, y)
 
-#print(get_move())
+#TODO is a move valid on a given board? coordinates will be valid(between
+#  0 and 2) but will the cell be empty? Can't place 'O' over 'X'
+def is_move_valid(board, coordinates):
 
 # make a single move, and return the updated board state
 # assume coords are correct, validation done elsewhere
@@ -66,12 +64,13 @@ def make_move(board, coord, player):
         for j in range(BOARD_WIDTH):
             new_board_state[i][j] = board[i][j]
 
-    # TODO player - 'X' or 'O' - currently passing in 'X' or 'O'
-    # maybe better way or just call as if player1:make_move(board, (x, y), 'X')
-    # else#player 2: make_move(board, (x, y), 'O')
     x = coord[0]
     y = coord[1]
-    new_board_state[x][y] = player
+    # TODO if is_move_valid()
+    if new_board_state[x][y] is None:
+        new_board_state[x][y] = player
+    else:
+        raise Exception("Co-ordinated already used")
 
     return new_board_state
 
@@ -84,3 +83,18 @@ render(b1)
 move_coord_2 = (1, 1)
 b1 = make_move(b1, move_coord_2, "O")
 render(b1)
+
+b1 =  make_move(b1, move_coord_2, 'O')
+render(b1)
+
+"""
+move_coords = None
+while True:
+    move_coords = get_move()
+    if is_valid_move(board, move_coords):
+        break
+    else:
+        print "Invalid move, try again"
+
+board = make_move(board, move_coords, player)
+"""
