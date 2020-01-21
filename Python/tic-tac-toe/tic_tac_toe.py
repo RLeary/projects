@@ -59,12 +59,16 @@ def get_move():
 #print(get_move())
 
 # make a single move, and return the updated board state
+# assume coords are correct, validation done elsewhere
 def make_move(board, coord, player):
     new_board_state = new_board()
-    # TODO new_board_state = board
+    for i in range(BOARD_HEIGHT):
+        for j in range(BOARD_WIDTH):
+            new_board_state[i][j] = board[i][j]
 
-
-    # TODO update board with new move
+    # TODO player - 'X' or 'O' - currently passing in 'X' or 'O'
+    # maybe better way or just call as if player1:make_move(board, (x, y), 'X')
+    # else#player 2: make_move(board, (x, y), 'O')
     x = coord[0]
     y = coord[1]
     new_board_state[x][y] = player
