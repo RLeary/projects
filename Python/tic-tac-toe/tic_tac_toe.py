@@ -70,17 +70,6 @@ def get_valid_moves(board):
 
     return valid_moves
 
-#b1 = new_board()
-#b1[1][2] = 'X'
-#b1[0][0] = 'O'
-#b1[2][1] = 'X'
-#print(get_move(b1))
-
-
-#TODO this is not needed anymore, get_move only returns valid moves
-def is_move_valid(board, coordinates):
-    pass
-
 # make a single move, and return the updated board state
 # assume coords are correct, validation done elsewhere
 def make_move(board, coord, player):
@@ -89,12 +78,8 @@ def make_move(board, coord, player):
         for j in range(BOARD_WIDTH):
             new_board_state[i][j] = board[i][j]
     
-    # TODO implement new get_move()
-    valid_moves = get_valid_moves(new_board_state)
-
     x = coord[0]
     y = coord[1]
-    # TODO if is_move_valid()
     if new_board_state[x][y] is None:
         new_board_state[x][y] = player
     else:
@@ -104,26 +89,13 @@ def make_move(board, coord, player):
 
 b1 = new_board()
 
-move_coord = (2, 0)
-b1 = make_move(b1, move_coord, "X")
+move_coord_1 = get_move(b1)
+b1 = make_move(b1, move_coord_1, "X")
 render(b1)
 
-move_coord_2 = (1, 1)
+move_coord_2 = get_move(b1)
 b1 = make_move(b1, move_coord_2, "O")
 render(b1)
 
 b1 =  make_move(b1, move_coord_2, 'O')
 render(b1)
-
-
-"""
-move_coords = None
-while True:
-    move_coords = get_move()
-    if is_valid_move(board, move_coords):
-        break
-    else:
-        print "Invalid move, try again"
-
-board = make_move(board, move_coords, player)
-"""
