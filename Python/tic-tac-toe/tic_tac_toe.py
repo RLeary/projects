@@ -56,7 +56,8 @@ def get_move(board):
     while move_int not in valid_moves_ints:
         move_int = input("Enter your selection: ")
 
-    # reverse CELL_DISPLAY dict to get the key from the value - this works as all kv pairs are unique
+    # reverse CELL_DISPLAY dict to get the key from the value - this works
+    #  as all kv pairs are unique
     coords = dict(zip(CELL_DISPLAY.values(), CELL_DISPLAY.keys()))
 
     return coords[move_int]
@@ -87,15 +88,36 @@ def make_move(board, coord, player):
 
     return new_board_state
 
-b1 = new_board()
+def check_if_board_full(board):
+    for x in range(BOARD_HEIGHT):
+        for y in range(BOARD_WIDTH):
+            if board[x][y] is None:
+                return False
+    return True
 
-move_coord_1 = get_move(b1)
-b1 = make_move(b1, move_coord_1, "X")
-render(b1)
+# play game, alternating between player1 and player2
+def play_game(player1, player2):
+    # TODO implement
+    players = [
+        ('X', player1),
+        ('O', player2),
+    ]
 
-move_coord_2 = get_move(b1)
-b1 = make_move(b1, move_coord_2, "O")
-render(b1)
+    board = new_board()
+    turn_number = 0
+    while not check_if_board_full(board):
+        current_player_symbol, current_player = players[turn_number % 2]
+        print("Current player: ", current_player)
+        render(board)
 
-b1 =  make_move(b1, move_coord_2, 'O')
-render(b1)
+        move = get_move(board)
+        board = make_move(board, move, current_player_symbol)
+        render(board)
+
+        turn_number += 1  
+
+player1 = 'X'
+player2 = 'O'
+
+play_game(player1, player2)
+print('done')
