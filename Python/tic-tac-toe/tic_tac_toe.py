@@ -1,6 +1,18 @@
 BOARD_HEIGHT = 3
 BOARD_WIDTH = 3
-PRINTED_GRID_WIDTH = 14
+PRINTED_GRID_WIDTH = 7
+
+CELL_DISPLAY = {
+    (0, 0): '1',
+    (0, 1): '2',
+    (0, 2): '3',
+    (1, 0): '4',
+    (1, 1): '5',
+    (1, 2): '6',
+    (2, 0): '7',
+    (2, 1): '8',
+    (2, 2): '9',
+}
 
 # Creates a board data structure for the game
 # [][], all None
@@ -10,34 +22,25 @@ def new_board():
 # render the board as a 2d grid, rather than printing 
 # [[X, X, None], [O, None, None], O, None, None]] eg
 def render(board):
-    lines = list()
-    for i in range(BOARD_HEIGHT):
-        line = list()
-        for j in range(BOARD_WIDTH):
-            line.append(board[j][i])
-        lines.append(line)
-
     horizontal_line = str()
     for i in range(PRINTED_GRID_WIDTH):
         horizontal_line += '-'
-    
-    line_no = 0
-    print(' | 0 | 1 | 2 |')
-    for line in lines:
+
+    lines = list()
+    for x in range(BOARD_WIDTH):
+        line = str()
         line_to_output = '|'
         print(horizontal_line)
-        for cell in line:
-            if cell is None:
-                line_to_output += ' '
+        for y in range(BOARD_HEIGHT):
+            if board[x][y] is None:
+                line_to_output += CELL_DISPLAY[(x, y)]
                 line_to_output += '|'
             else:
-                line_to_output += cell
+                line_to_output += board[x][y]
                 line_to_output += '|'
         #print(line_to_output)
-        print("%d%s" % (line_no, ' '.join(line_to_output)))
-        line_no += 1
+        print(line_to_output)
     print(horizontal_line)
-    print('\n')
 
 # returns the coordinates of a player's chosen move
 def get_move():
