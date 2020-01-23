@@ -1,3 +1,5 @@
+import random
+
 BOARD_HEIGHT = 3
 BOARD_WIDTH = 3
 PRINTED_GRID_WIDTH = 7
@@ -89,6 +91,26 @@ def make_move(board, coord, player):
 
     return new_board_state
 
+# very basic ai player that only makes random moves
+def make_move_rand_ai(board, player):
+    new_board_state = new_board()
+    for i in range(BOARD_HEIGHT):
+        for j in range(BOARD_WIDTH):
+            new_board_state[i][j] = board[i][j]
+
+    # TODO implement get random valid coordinates
+    valid_moves = get_valid_moves(board)
+    move_coord = random.choice(valid_moves)
+    x = move_coord[0]
+    y = move_coord[1] 
+
+    if new_board_state[x][y] is None:
+        new_board_state[x][y] = player
+    else:
+        raise Exception("Co-ordinate already used")
+
+    return new_board_state
+
 def check_if_board_full(board):
     for x in range(BOARD_HEIGHT):
         for y in range(BOARD_WIDTH):
@@ -111,8 +133,11 @@ def play_game(player1, player2):
         print("Current player: ", current_player)
         render(board)
 
-        move = get_move(board)
-        board = make_move(board, move, current_player_symbol)
+        if current_player == 'Human':
+            move = get_move(board)
+            board = make_move(board, move, current_player_symbol)
+        else:
+            board = make_move_rand_ai(board, current_player_symbol)
         render(board)
 
         if get_winner(board):
@@ -158,8 +183,8 @@ def get_all_coords():
     return all_line_coords
 
 if __name__ == "__main__":
-    player1 = 'X'
-    player2 = 'O'
+    player1 = 'Human'
+    player2 = 'AI'
 
     winner = play_game(player1, player2)
     print(winner)
