@@ -44,7 +44,7 @@ def render(board):
 
 # returns the coordinates of a player's chosen move
 def get_move(board):
-    move_int = None
+    move_int = 0
     valid_moves = get_valid_moves(board)
     valid_moves_ints = list()
 
@@ -58,6 +58,7 @@ def get_move(board):
 
     # reverse CELL_DISPLAY dict to get the key from the value - this works
     #  as all kv pairs are unique
+    # could probaly just get relevant CELL_DISPLAY.keys()
     coords = dict(zip(CELL_DISPLAY.values(), CELL_DISPLAY.keys()))
 
     return coords[move_int]
@@ -114,10 +115,51 @@ def play_game(player1, player2):
         board = make_move(board, move, current_player_symbol)
         render(board)
 
-        turn_number += 1  
+        if get_winner(board):
+            return current_player
 
-player1 = 'X'
-player2 = 'O'
+        turn_number += 1
 
-play_game(player1, player2)
-print('done')
+    return 'Draw'
+
+# returns the winning player
+# if no winner return None
+def get_winner(board):
+    # TODO implement properly, cheated
+    # list of all lines, if a line has 3 of same type, return player
+    all_line_coords = get_all_coords()
+
+    for line in all_line_coords:
+        line_values = [board[x][y] for (x, y) in line]
+        if len(set(line_values)) == 1 and line_values[0] is not None:
+            return line_values[0]
+
+    return None
+    
+def get_all_coords():
+    all_line_coords = list()
+
+    for x in range(BOARD_WIDTH):
+        column = list()
+        for y in range(BOARD_HEIGHT):
+            column.append((x, y))
+        all_line_coords.append(column)
+
+    for y in range(BOARD_HEIGHT):
+        row = list()
+        for x in range(BOARD_WIDTH):
+            row.append((x, y))
+        all_line_coords.append(row)
+
+    # diagonal
+    all_line_coords.append([(0, 0), (1, 1), (2, 2)])
+    all_line_coords.append([(0, 2), (1, 1), (2, 0)])
+    
+    return all_line_coords
+
+if __name__ == "__main__":
+    player1 = 'X'
+    player2 = 'O'
+
+    winner = play_game(player1, player2)
+    print(winner)
