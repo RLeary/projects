@@ -29,7 +29,7 @@ def render(board):
             horizontal_line += '+'
         else:
             horizontal_line += '-'
-
+    print(" 0 1 2 3 4 5 6 ")
     lines = list()
     for x in range(BOARD_HEIGHT):
         line = str()
@@ -60,14 +60,44 @@ def make_move(board, move, player_symbol):
 # get a column from user, then return the row the token will drop to
 # TODO implement
 def get_move(board):
-    pass
+    valid_columns = get_valid_columns(board)
+    col_selection = None
+    x_move = None
+    y_move = None
 
-def check_if_column_full(board, col):
+    print("Available moves: ",', '.join(str(x) for x in valid_columns))
+
+    while col_selection not in valid_columns:
+        col_selection = int(input("Enter your selection: "))
+    
+    x_move = col_selection
+    y_move = get_drop_row_index(board[x_move])
+
+    return(x_move, y_move)
+
+# returns the index of the 'bottom' empty row
+# eg [None, None, None, None, 'O', 'O'] returns 3
+# TODO implement
+# should never be given a full column, get_move() only gets non-full columns
+def get_drop_row_index(column):
+    for i in range(BOARD_HEIGHT):
+        if column[i] is not None:
+            return i-1
+    return BOARD_HEIGHT-1
+
+def check_if_column_full(col):
     for x in range(BOARD_HEIGHT):
         if col[x] == None:
             return False
     return True
 
+# return a list of non full columns
+def get_valid_columns(board):
+    valid_columns = list()
+    for i in range(BOARD_WIDTH):
+        if not check_if_column_full(board[i]):
+            valid_columns.append(i)
+    return valid_columns
 
 def check_if_board_full(board):
     for x in range(BOARD_HEIGHT):
@@ -78,6 +108,26 @@ def check_if_board_full(board):
 
 if __name__ == "__main__":
     b1 = new_board()
+    """
     b1[0][2] = 'X'
     b1[3][5] = 'X'
+    b1[0][1] = 'X'
+    b1[0][3] = 'X'
+    b1[0][4] = 'X'
+    b1[0][5] = 'X'
+    b1[0][0] = 'X'
+    b1[5][0] = 'X'
+    b1[5][1] = 'X'
+    b1[5][2] = 'X'
+    b1[5][3] = 'X'
+    b1[5][4] = 'X'
+    b1[5][5] = 'X'
+    b1[6][5] = 'X'
+    """
+    (x, y) = get_move(b1)
+    b1[x][y] = 'O'
+
+    render(b1)
+    (i, j) = get_move(b1)
+    b1[i][j] = 'O'
     render(b1)
