@@ -7,6 +7,7 @@ BOARD_WIDTH = 7
 PRINTED_GRID_WIDTH = 15
 
 # neither of these working on windows
+# TODO get colour working on windows
 #RED = colored('O', 'red', attrs=['bold'])
 #YELLOW = colored('O', 'yellow', attrs=['bold'])
 #RED = u'\33[31m'
@@ -46,11 +47,6 @@ def render(board):
         print(line_to_output)
     print(horizontal_line)
 
-
-
-# hint for thinking about board, hover over a board and turn head 90* left
-
-# TODO implement - 
 # get column, go though x elements in column until not None, then place x-1
 # move is (x, y)
 def make_move(board, move, player_symbol):
@@ -117,28 +113,60 @@ def check_if_board_full(board):
                 return False
     return True
 
+# TODO implement
+# return the winning player
+# return None if no winner
+def get_winner(board):
+    # get all possible line co-cords
+    # if a line contains 4 in a row, return a cell contents
+    return None
+"""
+# tictactoe.py
+def get_winner(board):
+    # TODO implement properly, cheated
+    # list of all lines, if a line has 3 of same type, return player
+    all_line_coords = get_all_coords()
+
+    for line in all_line_coords:
+        line_values = [board[x][y] for (x, y) in line]
+        if len(set(line_values)) == 1 and line_values[0] is not None:
+            return line_values[0]
+
+    return None
+
+"""
+
+def play_game(player1, player2):
+    players = [
+        (RED, player1),
+        (YELLOW, player2)
+    ]
+
+    board = new_board()
+    turn_number = 0
+
+    while not check_if_board_full(board):
+        current_player_symbol, current_player = players[turn_number % 2]
+        print("Current player: ", current_player)
+        render(board)
+
+        move = get_move(board)
+        board = make_move(board, move, current_player_symbol)
+        render(board)
+
+        if get_winner(board):
+            # TODO un-comment following line once get_winner() implemented
+            # return current_player
+            return 'Won'
+
+        turn_number += 1
+
+    return 'Draw'
+
 if __name__ == "__main__":
+    player1 = 'R'
+    player2 = 'Y'
     b1 = new_board()
 
-    b1[0][2] = 'X'
-    b1[3][5] = 'X'
-    b1[0][1] = 'X'
-    b1[0][3] = 'X'
-    b1[0][4] = 'X'
-    b1[0][5] = 'X'
-    b1[0][0] = 'X'
-    b1[5][0] = 'X'
-    b1[5][1] = 'X'
-    b1[5][2] = 'X'
-    b1[5][3] = 'X'
-    b1[5][4] = 'X'
-    b1[5][5] = 'X'
-    b1[6][5] = 'X'
-    
-    render(b1)
-    move_1 = get_move(b1)
-    b1 = make_move(b1, move_1, 'O')
-    render(b1)
-    move_2 = get_move(b1)
-    b1 = make_move(b1, move_2, 'O')
-    render(b1)
+    winner = play_game(player1, player2)
+    print(winner)
