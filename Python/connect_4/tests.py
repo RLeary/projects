@@ -121,8 +121,43 @@ if __name__ == "__main__":
 
 
 # Test make_move()
-    # TODO implement
+    # TODO move passed in is invalid?
+    board_make_move = [
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, 'O'],
+        [None, None, None, 'O', 'O', 'O'],
+        [None, 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O']
+    ]
 
+    board_make_move_updated_1 = [
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, 'O'],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, 'O'],
+        [None, None, None, 'O', 'O', 'O'],
+        [None, 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O']
+    ]
+    
+    board_make_move_updated_2 = [
+        [None, None, None, None, None, None],
+        [None, None, None, None, 'O', 'O'],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, 'O'],
+        [None, None, None, 'O', 'O', 'O'],
+        [None, 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O']
+    ]
+
+
+    move_1 = (1, 5)
+    move_2 = (1, 4)
+
+    assert make_move(board_make_move, move_1, 'O') == board_make_move_updated_1
+    assert make_move(board_make_move_updated_1, move_2, 'O') == board_make_move_updated_2
 
 # Test get_move()
     # TODO once unit tests are all in TestCase classes:

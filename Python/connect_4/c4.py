@@ -54,11 +54,23 @@ def render(board):
 # get column, go though x elements in column until not None, then place x-1
 # move is (x, y)
 def make_move(board, move, player_symbol):
-    pass
+    new_board_state = new_board()
+    for i in range(BOARD_HEIGHT):
+        for j in range(BOARD_WIDTH):
+            new_board_state[j][i] = board[j][i]
+
+    x = move[0]
+    y = move[1]
+
+    if new_board_state[x][y] is None:
+        new_board_state[x][y] = player_symbol
+    else:
+        raise Exception("Co-ordinate already used")
+
+    return new_board_state
 
 # returns a move (x, y)
 # get a column from user, then return the row the token will drop to
-# TODO implement
 def get_move(board):
     valid_columns = get_valid_columns(board)
     col_selection = None
@@ -77,8 +89,7 @@ def get_move(board):
 
 # returns the index of the 'bottom' empty row
 # eg [None, None, None, None, 'O', 'O'] returns 3
-# TODO implement
-# should never be given a full column, get_move() only gets non-full columns
+# will never be given a full column, get_move() only gets non-full columns
 def get_drop_row_index(column):
     for i in range(BOARD_HEIGHT):
         if column[i] is not None:
@@ -108,7 +119,7 @@ def check_if_board_full(board):
 
 if __name__ == "__main__":
     b1 = new_board()
-    """
+
     b1[0][2] = 'X'
     b1[3][5] = 'X'
     b1[0][1] = 'X'
@@ -123,11 +134,11 @@ if __name__ == "__main__":
     b1[5][4] = 'X'
     b1[5][5] = 'X'
     b1[6][5] = 'X'
-    """
-    (x, y) = get_move(b1)
-    b1[x][y] = 'O'
-
+    
     render(b1)
-    (i, j) = get_move(b1)
-    b1[i][j] = 'O'
+    move_1 = get_move(b1)
+    b1 = make_move(b1, move_1, 'O')
+    render(b1)
+    move_2 = get_move(b1)
+    b1 = make_move(b1, move_2, 'O')
     render(b1)
