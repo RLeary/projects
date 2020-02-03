@@ -19,6 +19,7 @@ YELLOW = 'Y'
 
 # Creates a board data structure for the game
 # [col][row], all None
+# [y][x]
 def new_board():
     return [[None for x in range(BOARD_HEIGHT)] for x in range(BOARD_WIDTH)]
 
@@ -31,9 +32,8 @@ def render(board):
         else:
             horizontal_line += '-'
     print(" 0 1 2 3 4 5 6 ")
-    lines = list()
     for x in range(BOARD_HEIGHT):
-        line = str()
+        line_to_output = str()
         line_to_output = '|'
         print(horizontal_line)
         for y in range(BOARD_WIDTH):
@@ -114,27 +114,91 @@ def check_if_board_full(board):
     return True
 
 # TODO implement
-# return the winning player
-# return None if no winner
+# return True if there is a winner
+# return False if no winner
+# play_game can handle who has won
 def get_winner(board):
-    # get all possible line co-cords
-    # if a line contains 4 in a row, return a cell contents
-    return None
-"""
-# tictactoe.py
-def get_winner(board):
-    # TODO implement properly, cheated
-    # list of all lines, if a line has 3 of same type, return player
-    all_line_coords = get_all_coords()
+    if (get_winner_vertical(board) or 
+    get_winner_horizontal(board) or 
+    get_winner_diagonal(board)):
+        return True
+    return False
 
-    for line in all_line_coords:
-        line_values = [board[x][y] for (x, y) in line]
-        if len(set(line_values)) == 1 and line_values[0] is not None:
-            return line_values[0]
+# TODO tidy up following get_winner_xxx() functions
+def get_winner_vertical(board):
+    for y in range(BOARD_WIDTH):
+        # three possible sets for a vertical 4, x = [0, 1, 2, 3], 
+        # x = [1, 2, 3, 4], x = [2, 3, 4, 5]
+        zero_start_x_list = list()
+        one_start_x_list = list()
+        two_start_x_list = list()
 
-    return None
+        # TODO find better way of doing this
+        # doing this in for loop for x in range(xxx):
+        # append(board[y][x+1]) append(board[y][x+2]) etc 
+        # goes out of bounds
+        zero_start_x_list.append(board[y][0])
+        zero_start_x_list.append(board[y][1])
+        zero_start_x_list.append(board[y][2])
+        zero_start_x_list.append(board[y][3])
+        one_start_x_list.append(board[y][1])
+        one_start_x_list.append(board[y][2])
+        one_start_x_list.append(board[y][3])
+        one_start_x_list.append(board[y][4])
+        two_start_x_list.append(board[y][2])
+        two_start_x_list.append(board[y][3])
+        two_start_x_list.append(board[y][4])
+        two_start_x_list.append(board[y][5])
 
-"""
+        if len(set(zero_start_x_list)) == 1 and zero_start_x_list[0] is not None:
+            return True
+        elif len(set(one_start_x_list)) == 1 and one_start_x_list[0] is not None:
+            return True
+        elif len(set(two_start_x_list)) == 1 and two_start_x_list[0] is not None:
+            return True
+    return False
+
+
+def get_winner_horizontal(board):
+    # opposite of vertical, for x in height, change y
+    # four sets
+    for x in range(BOARD_HEIGHT):
+        zero_start_y_list = list()
+        one_start_y_list = list()
+        two_start_y_list = list()
+        three_start_y_list = list()
+
+        zero_start_y_list.append(board[0][x])
+        zero_start_y_list.append(board[1][x])
+        zero_start_y_list.append(board[2][x])
+        zero_start_y_list.append(board[3][x])
+        one_start_y_list.append(board[1][x])
+        one_start_y_list.append(board[2][x])
+        one_start_y_list.append(board[3][x])
+        one_start_y_list.append(board[4][x])
+        two_start_y_list.append(board[2][x])
+        two_start_y_list.append(board[3][x])
+        two_start_y_list.append(board[4][x])
+        two_start_y_list.append(board[5][x])
+        three_start_y_list.append(board[3][x])
+        three_start_y_list.append(board[4][x])
+        three_start_y_list.append(board[5][x])
+        three_start_y_list.append(board[6][x])
+
+        if len(set(zero_start_y_list)) == 1 and zero_start_y_list[0] is not None:
+            return True
+        elif len(set(one_start_y_list)) == 1 and one_start_y_list[0] is not None:
+            return True
+        elif len(set(two_start_y_list)) == 1 and two_start_y_list[0] is not None:
+            print('two')
+            return True
+        elif len(set(three_start_y_list)) == 1 and three_start_y_list[0] is not None:
+            return True
+    return False
+
+# TODO implement
+def get_winner_diagonal(board):
+    return False
 
 def play_game(player1, player2):
     players = [
@@ -156,8 +220,8 @@ def play_game(player1, player2):
 
         if get_winner(board):
             # TODO un-comment following line once get_winner() implemented
-            # return current_player
-            return 'Won'
+            return current_player
+            #return 'Won'
 
         turn_number += 1
 

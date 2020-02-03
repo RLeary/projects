@@ -3,7 +3,7 @@
 # each test its own funtion, eg class test_if_baord_full(unittest.TestCase):
 # def test_full(self):... def test_empty(self)....
 # TODO do above ^^
-from c4 import new_board, check_if_board_full, check_if_column_full, get_move, make_move ,get_valid_columns, get_drop_row_index
+from c4 import new_board, check_if_board_full, check_if_column_full, get_move, make_move ,get_valid_columns, get_drop_row_index, get_winner
 
 if __name__ == "__main__":
 
@@ -152,7 +152,6 @@ if __name__ == "__main__":
         ['O', 'O', 'O', 'O', 'O', 'O']
     ]
 
-
     move_1 = (1, 5)
     move_2 = (1, 4)
 
@@ -173,3 +172,88 @@ if __name__ == "__main__":
     ]
 
     #move = get_move(board)
+
+# Test get_winner()
+
+# fpr the foillowing - remember [y][x]
+    board_get_winner_empty = [
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None]
+    ]
+    board_get_winner_full = [
+        ['Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y', 'Y', 'Y', 'Y'],
+    ]
+    board_get_winner_win_vert = [
+        [None, 'Y', 'Y', 'Y', 'Y', None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None]
+    ]
+    board_get_winner_win_hor = [
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, 'Y', None, None, None],
+        [None, None, 'Y', None, None, None],
+        [None, None, 'Y', None, None, None],
+        [None, None, 'Y', None, None, None],
+        [None, None, None, None, None, None]
+    ]
+    board_get_winner_win_dia1 = [
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        ['Y', None, None, None, None, None],
+        [None, 'Y', None, None, None, None],
+        [None, None, 'Y', None, None, None],
+        [None, None, None, 'Y', None, None],
+        [None, None, None, None, None, None]
+    ]
+    board_get_winner_win_dia2 = [
+         [None, None, None, None, None, 'Y'],
+        [None, None, None, None, 'Y', None],
+        [None, None, None, 'Y', None, None],
+        [None, None, 'Y', None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None]
+    ]
+    board_get_winner_full_draw = [
+        ['R', 'Y', 'Y', 'Y', 'R', 'R'],
+        ['Y', 'Y', 'R', 'R', 'R', 'Y'],
+        ['Y', 'R', 'Y', 'Y', 'Y', 'R'],
+        ['R', 'R', 'R', 'Y', 'Y', 'Y'],
+        ['Y', 'R', 'R', 'Y', 'R', 'R'],
+        ['R', 'Y', 'Y', 'R', 'R', 'Y'],
+        ['Y', 'R', 'R', 'Y', 'Y', 'R'],
+    ]
+    board_get_winner_non_finished_draw = [
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, 'R'],
+        [None, None, None, 'Y', 'R', 'Y'],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None],
+        [None, None, None, None, None, None]
+    ]
+
+    assert get_winner(board_get_winner_empty) == False
+    assert get_winner(board_get_winner_full) == True
+    assert get_winner(board_get_winner_win_vert) == True
+    assert get_winner(board_get_winner_win_hor) == True
+    assert get_winner(board_get_winner_win_dia1) == True
+    assert get_winner(board_get_winner_win_dia2) == True
+    assert get_winner(board_get_winner_full_draw) == False
+    assert get_winner(board_get_winner_non_finished_draw) == False
