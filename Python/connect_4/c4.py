@@ -161,7 +161,7 @@ def get_winner_vertical(board):
 
 def get_winner_horizontal(board):
     # opposite of vertical, for x in height, change y
-    # four sets
+    # four sets for every x
     for x in range(BOARD_HEIGHT):
         zero_start_y_list = list()
         one_start_y_list = list()
@@ -194,10 +194,12 @@ def get_winner_horizontal(board):
             return True
         elif len(set(three_start_y_list)) == 1 and three_start_y_list[0] is not None:
             return True
+    
     return False
 
 # TODO implement
 def get_winner_diagonal(board):
+
     return False
 
 def play_game(player1, player2):
