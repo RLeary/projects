@@ -199,8 +199,46 @@ def get_winner_horizontal(board):
 
 # TODO implement
 def get_winner_diagonal(board):
+    lines = list()
+    
+    left_diagonals = [
+        [board[0][1], board[1][2], board[2][3], board[3][4]],
+        [board[0][0], board[1][1], board[2][2], board[3][3]],
+        [board[0][2], board[1][3], board[2][4], board[3][5]],
+        [board[1][0], board[2][1], board[3][2], board[4][3]],
+        [board[1][1], board[2][2], board[3][3], board[4][4]],
+        [board[1][2], board[2][3], board[3][4], board[4][5]],
+        [board[2][0], board[3][1], board[4][2], board[5][3]],
+        [board[2][2], board[3][3], board[4][4], board[5][5]],
+        [board[3][0], board[4][1], board[5][2], board[6][3]],
+        [board[3][1], board[4][2], board[5][3], board[6][4]],
+        [board[3][2], board[4][3], board[5][4], board[6][5]],    
+    ]
+    
+    right_diagonals = [
+        [board[0][3], board[1][2], board[2][1], board[3][0]],
+        [board[0][4], board[1][3], board[2][2], board[3][1]],
+        [board[0][5], board[1][4], board[2][3], board[3][2]],
+        [board[1][3], board[2][2], board[3][1], board[4][0]],
+        [board[1][4], board[2][3], board[3][2], board[4][1]],
+        [board[1][5], board[2][4], board[3][3], board[4][2]],
+        [board[2][3], board[3][2], board[4][1], board[5][0]],
+        [board[2][4], board[3][3], board[4][2], board[5][1]],
+        [board[3][3], board[4][2], board[5][1], board[6][0]],
+        [board[3][4], board[4][3], board[5][2], board[6][1]],
+        [board[3][5], board[4][4], board[5][3], board[6][2]],
+    ]
+    # skip this and just check left and right for 4 in row?
+    for i in range(len(left_diagonals)):
+        lines.append(left_diagonals[i])
+        lines.append(right_diagonals[i])
+
+    for line in lines:
+        if len(set(line)) == 1 and line[0] is not None:
+            return True
 
     return False
+
 
 def play_game(player1, player2):
     players = [
