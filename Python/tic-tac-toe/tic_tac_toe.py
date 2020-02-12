@@ -25,12 +25,10 @@ def new_board():
 # [[X, X, None], [O, None, None], O, None, None]] eg
 def render(board):
     horizontal_line = str()
-    for i in range(PRINTED_GRID_WIDTH):
+    for _ in range(PRINTED_GRID_WIDTH):
         horizontal_line += '-'
 
-    lines = list()
     for x in range(BOARD_WIDTH):
-        line = str()
         line_to_output = '|'
         print(horizontal_line)
         for y in range(BOARD_HEIGHT):
@@ -187,4 +185,4 @@ if __name__ == "__main__":
     player2 = 'AI'
 
     winner = play_game(player1, player2)
-    print(winner)
+    print("Winner: ", winner+"!!!")
