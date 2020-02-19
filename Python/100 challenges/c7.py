@@ -19,3 +19,23 @@ y = int(input("Enter Y value: "))
 two_d_array = [[i*j for i in range(y)] for j in range(x)]
 
 print(two_d_array)
+
+# Given solutions
+"""
+x,y = map(int,input().split(','))
+lst = []
+
+for i in range(x):
+    tmp = []
+    for j in range(y):     
+        tmp.append(i*j)
+    lst.append(tmp)
+    
+print(lst)
+
+# OR
+
+x,y = map(int,input().split(','))
+lst = [[i*j for j in range(y)] for i in range(x)]  
+print(lst)
+"""
