@@ -28,3 +28,28 @@ def remove_duplicate_words(string):
 
 input_string = input("Enter a string to remove duplicates and sort: ")
 print(remove_duplicate_words(input_string))
+
+# Given solutions
+"""
+word = input().split()
+
+for i in word:
+    if word.count(i) > 1:    #count function returns total repeatation of an element that is send as argument
+        word.remove(i)     # removes exactly one element per call
+
+word.sort()
+print(" ".join(word))
+
+#OR
+
+word = input().split()
+[word.remove(i) for i in word if word.count(i) > 1 ]   # removal operation with comprehension method
+word.sort()
+print(" ".join(word))
+
+#OR
+
+word = sorted(list(set(input().split())))              #  input string splits -> converting into set() to store unique
+                                                       #  element -> converting into list to be able to apply sort 
+print(" ".join(word))
+"""
