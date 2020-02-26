@@ -1,5 +1,5 @@
 # Write a program, which will find all such numbers between 1000 and 3000
-# (both included) such that each digit of the number is an even number.The 
+# (both included) such that each digit of the number is an even number.The
 # numbers obtained should be printed in a comma-separated sequence on a single line.
 
 LOWER_LIMIT = 1000
@@ -17,7 +17,7 @@ for i in range(LOWER_LIMIT, UPPER_LIMIT):
         even_digits_list.append(i)
 
 even_digits_list = [str(i) for i in even_digits_list]
-print(','.join(even_digits_list))
+print(",".join(even_digits_list))
 
 # Given solutions
 """

@@ -2,8 +2,9 @@
 
 import random
 
-RANKS = range(1,14)
-SUITS = ('Spades', 'Hearts', 'Clubs', 'Diamonds')
+RANKS = range(1, 14)
+SUITS = ("Spades", "Hearts", "Clubs", "Diamonds")
+
 
 class Card:
     def __init__(self, rank, suit):
@@ -12,12 +13,14 @@ class Card:
         # rank names - queen ace etc
 
     def __repr__(self):
-        return f'{self.rank} of {self.suit}'
+        return f"{self.rank} of {self.suit}"
+
 
 def create_deck():
     """ Returns a standard deck of playing cards as a list.
     """
     return [Card(rank, suit) for suit in SUITS for rank in RANKS]
+
 
 def draw_hand(deck, hand_size=5):
     """ Draw hand_size cards from the top of the deck.
@@ -26,11 +29,13 @@ def draw_hand(deck, hand_size=5):
     """
     pass
 
+
 def contains_pair(hand):
     """ Returns a boolean indicating whether or
         not the hand has at least two cards of the same rank.
     """
     pass
+
 
 def verify_deck_size(deck, size):
     """ Verify that the deck is of a certain size.
@@ -39,15 +44,17 @@ def verify_deck_size(deck, size):
     if len(deck) != size:
         raise Exception(" Deck size error ")
 
+
 def count_suits(hand):
     """ Return a mapping of suit:count for each of the
         four suits based on the cards in hand.
     """
     pass
-    
+
+
 if __name__ == "__main__":
     deck = create_deck()
-    #print(deck)
+    # print(deck)
     random.shuffle(deck)
     hand, deck = draw_hand(deck)
     verify_deck_size(deck, 47)

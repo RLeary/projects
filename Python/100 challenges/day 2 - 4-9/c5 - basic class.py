@@ -7,7 +7,8 @@
 # Hints:
 # Use init method to construct some parameters
 
-class String():
+
+class String:
     def __init__(self):
         self.string = str()
 
@@ -16,6 +17,7 @@ class String():
 
     def print_string(self):
         print(self.string.upper())
+
 
 string = String()
 string.get_string()

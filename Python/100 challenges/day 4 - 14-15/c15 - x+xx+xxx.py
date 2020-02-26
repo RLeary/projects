@@ -1,16 +1,21 @@
-# Write a program that computes the value of a+aa+aaa+aaaa with a given digit 
+# Write a program that computes the value of a+aa+aaa+aaaa with a given digit
 # as the value of a.
-# 
+#
 # Suppose the following input is supplied to the program:
-# 
+#
 # 9
 # Then, the output should be:
-# 
+#
 # 11106
 
 input_integer = input("Enter an integer: ")
 
-result = int(input_integer) + int(2*input_integer) + int(3*input_integer) + int(4*input_integer)
+result = (
+    int(input_integer)
+    + int(2 * input_integer)
+    + int(3 * input_integer)
+    + int(4 * input_integer)
+)
 
 print(result)
 

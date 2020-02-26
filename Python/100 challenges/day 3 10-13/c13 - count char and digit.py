@@ -1,11 +1,11 @@
 # Write a program that accepts a sentence and calculate the number of letters
 # and digits.
-# 
+#
 # Suppose the following input is supplied to the program:
-# 
+#
 # hello world! 123
 # Then, the output should be:
-# 
+#
 # LETTERS 10
 # DIGITS 3
 
@@ -14,7 +14,7 @@ digit_count = 0
 
 input_string = input("Enter a string to count chars and digits: ")
 
-#for i in range(len(input_string)):
+# for i in range(len(input_string)):
 #    if input_string[i].isnumeric():
 #        digit_count += 1
 #    elif input_string[i].isalpha():

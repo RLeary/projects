@@ -5,15 +5,15 @@ BOARD_WIDTH = 3
 PRINTED_GRID_WIDTH = 7
 
 CELL_DISPLAY = {
-    (0, 0): '1',
-    (0, 1): '2',
-    (0, 2): '3',
-    (1, 0): '4',
-    (1, 1): '5',
-    (1, 2): '6',
-    (2, 0): '7',
-    (2, 1): '8',
-    (2, 2): '9',
+    (0, 0): "1",
+    (0, 1): "2",
+    (0, 2): "3",
+    (1, 0): "4",
+    (1, 1): "5",
+    (1, 2): "6",
+    (2, 0): "7",
+    (2, 1): "8",
+    (2, 2): "9",
 }
 
 # Creates a board data structure for the game
@@ -21,26 +21,28 @@ CELL_DISPLAY = {
 def new_board():
     return [[None for x in range(BOARD_HEIGHT)] for x in range(BOARD_WIDTH)]
 
-# render the board as a 2d grid, rather than printing 
+
+# render the board as a 2d grid, rather than printing
 # [[X, X, None], [O, None, None], O, None, None]] eg
 def render(board):
     horizontal_line = str()
     for _ in range(PRINTED_GRID_WIDTH):
-        horizontal_line += '-'
+        horizontal_line += "-"
 
     for x in range(BOARD_WIDTH):
-        line_to_output = '|'
+        line_to_output = "|"
         print(horizontal_line)
         for y in range(BOARD_HEIGHT):
             if board[x][y] is None:
                 line_to_output += CELL_DISPLAY[(x, y)]
-                line_to_output += '|'
+                line_to_output += "|"
             else:
                 line_to_output += board[x][y]
-                line_to_output += '|'
-        #print(line_to_output)
+                line_to_output += "|"
+        # print(line_to_output)
         print(line_to_output)
     print(horizontal_line)
+
 
 # returns the coordinates of a player's chosen move
 def get_move(board):
@@ -51,7 +53,7 @@ def get_move(board):
     for i in range(len(valid_moves)):
         valid_moves_ints.append(CELL_DISPLAY[valid_moves[i]])
 
-    print("Available moves: ",', '.join(str(x) for x in valid_moves_ints))
+    print("Available moves: ", ", ".join(str(x) for x in valid_moves_ints))
 
     while move_int not in valid_moves_ints:
         move_int = input("Enter your selection: ")
@@ -63,6 +65,7 @@ def get_move(board):
 
     return coords[move_int]
 
+
 def get_valid_moves(board):
     valid_moves = list()
     for x in range(BOARD_WIDTH):
@@ -72,6 +75,7 @@ def get_valid_moves(board):
 
     return valid_moves
 
+
 # make a single move, and return the updated board state
 # assume coords are correct, validation done elsewhere
 def make_move(board, coord, player):
@@ -79,7 +83,7 @@ def make_move(board, coord, player):
     for i in range(BOARD_HEIGHT):
         for j in range(BOARD_WIDTH):
             new_board_state[i][j] = board[i][j]
-    
+
     x = coord[0]
     y = coord[1]
     if new_board_state[x][y] is None:
@@ -88,6 +92,7 @@ def make_move(board, coord, player):
         raise Exception("Co-ordinated already used")
 
     return new_board_state
+
 
 # very basic ai player that only makes random moves
 def make_move_rand_ai(board, player):
@@ -100,7 +105,7 @@ def make_move_rand_ai(board, player):
     valid_moves = get_valid_moves(board)
     move_coord = random.choice(valid_moves)
     x = move_coord[0]
-    y = move_coord[1] 
+    y = move_coord[1]
 
     if new_board_state[x][y] is None:
         new_board_state[x][y] = player
@@ -109,6 +114,7 @@ def make_move_rand_ai(board, player):
 
     return new_board_state
 
+
 def check_if_board_full(board):
     for x in range(BOARD_HEIGHT):
         for y in range(BOARD_WIDTH):
@@ -116,12 +122,13 @@ def check_if_board_full(board):
                 return False
     return True
 
+
 # play game, alternating between player1 and player2
 def play_game(player1, player2):
     # TODO implement
     players = [
-        ('X', player1),
-        ('O', player2),
+        ("X", player1),
+        ("O", player2),
     ]
 
     board = new_board()
@@ -131,7 +138,7 @@ def play_game(player1, player2):
         print("Current player: ", current_player)
         render(board)
 
-        if current_player == 'Human':
+        if current_player == "Human":
             move = get_move(board)
             board = make_move(board, move, current_player_symbol)
         else:
@@ -143,7 +150,8 @@ def play_game(player1, player2):
 
         turn_number += 1
 
-    return 'Draw'
+    return "Draw"
+
 
 # returns the winning player
 # if no winner return None
@@ -158,7 +166,8 @@ def get_winner(board):
             return line_values[0]
 
     return None
-    
+
+
 def get_all_coords():
     all_line_coords = list()
 
@@ -177,12 +186,14 @@ def get_all_coords():
     # diagonal
     all_line_coords.append([(0, 0), (1, 1), (2, 2)])
     all_line_coords.append([(0, 2), (1, 1), (2, 0)])
-    
+
     return all_line_coords
 
+
 if __name__ == "__main__":
-    player1 = 'Human'
-    player2 = 'AI'
+    player1 = "Human"
+    player2 = "AI"
 
     winner = play_game(player1, player2)
-    print("Winner: ", winner+"!!!")
+    print("Winner: ", winner + "!!!")
+

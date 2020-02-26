@@ -4,21 +4,13 @@ from gol import next_board_state, dead_state
 
 if __name__ == "__main__":
     # TEST 1 - dead cells with no live neighbours stay dead
-    #state_test_1_w = 3
-    #state_test_1_h = 3
-    #init_state_test_1 = dead_state(state_test_1_w, state_test_1_h)
-    #expected_next_state_test_1 = dead_state(state_test_1_w, state_test_1_h)
+    # state_test_1_w = 3
+    # state_test_1_h = 3
+    # init_state_test_1 = dead_state(state_test_1_w, state_test_1_h)
+    # expected_next_state_test_1 = dead_state(state_test_1_w, state_test_1_h)
 
-    init_state_test_1 = [
-        [0,0,0],
-        [0,0,0],
-        [0,0,0]
-    ]
-    expected_next_state_test_1 = [
-        [0,0,0],
-        [0,0,0],
-        [0,0,0]
-    ]
+    init_state_test_1 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    expected_next_state_test_1 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
     actual_next_state_test_1 = next_board_state(init_state_test_1)
 
@@ -32,16 +24,8 @@ if __name__ == "__main__":
         print(actual_next_state_test_1)
 
     # TEST 2 - dead cells with 3 neighbours come alive
-    init_state_test_2 = [
-        [0, 0, 1],
-        [0, 1, 1],
-        [0, 0, 0]
-    ]
-    expected_next_state_test_2 = [
-        [0, 1, 1],
-        [0, 1, 1],
-        [0, 0, 0]
-    ]
+    init_state_test_2 = [[0, 0, 1], [0, 1, 1], [0, 0, 0]]
+    expected_next_state_test_2 = [[0, 1, 1], [0, 1, 1], [0, 0, 0]]
 
     actual_next_state_test_2 = next_board_state(init_state_test_2)
 
@@ -55,16 +39,8 @@ if __name__ == "__main__":
         print(actual_next_state_test_2)
 
     # TEST 3 - Any live cell with 2 or 3 live neighbors stays alive
-    init_state_test_3 = [
-        [0, 1, 0],
-        [1, 0, 1],
-        [0, 1, 0]
-    ]
-    expected_next_state_test_3 = [
-        [0, 1, 0],
-        [1, 0, 1],
-        [0, 1, 0]
-    ]
+    init_state_test_3 = [[0, 1, 0], [1, 0, 1], [0, 1, 0]]
+    expected_next_state_test_3 = [[0, 1, 0], [1, 0, 1], [0, 1, 0]]
 
     actual_next_state_test_3 = next_board_state(init_state_test_3)
 
@@ -78,17 +54,12 @@ if __name__ == "__main__":
         print(actual_next_state_test_3)
 
     # TEST 4 - Any live cell with more than 3 live neighbors dies
-    init_state_test_4 = [
-        [1, 1, 0, 0],
-        [1, 1, 0, 0],
-        [0, 0, 1, 1],
-        [0, 0, 1, 1]
-    ]
+    init_state_test_4 = [[1, 1, 0, 0], [1, 1, 0, 0], [0, 0, 1, 1], [0, 0, 1, 1]]
     expected_next_state_test_4 = [
         [1, 1, 0, 0],
         [1, 0, 0, 0],
         [0, 0, 0, 1],
-        [0, 0, 1, 1]
+        [0, 0, 1, 1],
     ]
 
     actual_next_state_test_4 = next_board_state(init_state_test_4)
@@ -103,17 +74,12 @@ if __name__ == "__main__":
         print(actual_next_state_test_4)
 
     # TEST 5 - live cells with 0 or 1 live neighbors dies
-    init_state_test_5 = [
-        [0, 1, 1, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 1, 0, 0]
-    ]
+    init_state_test_5 = [[0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 0, 0]]
     expected_next_state_test_5 = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
-        [0, 0, 0, 0]
+        [0, 0, 0, 0],
     ]
 
     actual_next_state_test_5 = next_board_state(init_state_test_5)

@@ -1,21 +1,21 @@
 # Colored terminal output needs a workaround for windows
 
-#from termcolor import colored, cprint
+# from termcolor import colored, cprint
 
-BOARD_HEIGHT = 6 
+BOARD_HEIGHT = 6
 BOARD_WIDTH = 7
 PRINTED_GRID_WIDTH = 15
 
 # neither of these working on windows
 # TODO get colour working on windows
-#RED = colored('O', 'red', attrs=['bold'])
-#YELLOW = colored('O', 'yellow', attrs=['bold'])
-#RED = u'\33[31m'
-#YELLOW = u'\33[33m'
-#BLOCK = u'\u2588'
+# RED = colored('O', 'red', attrs=['bold'])
+# YELLOW = colored('O', 'yellow', attrs=['bold'])
+# RED = u'\33[31m'
+# YELLOW = u'\33[33m'
+# BLOCK = u'\u2588'
 
-RED = 'R'
-YELLOW = 'Y'
+RED = "R"
+YELLOW = "Y"
 
 # Creates a board data structure for the game
 # [col][row], all None
@@ -23,29 +23,31 @@ YELLOW = 'Y'
 def new_board():
     return [[None for x in range(BOARD_HEIGHT)] for x in range(BOARD_WIDTH)]
 
+
 # board[y][x] to print properly, as columns contain rows, not other way around
 def render(board):
     horizontal_line = str()
     for i in range(PRINTED_GRID_WIDTH):
         if i % 2 == 0:
-            horizontal_line += '+'
+            horizontal_line += "+"
         else:
-            horizontal_line += '-'
+            horizontal_line += "-"
     print(" 0 1 2 3 4 5 6 ")
     for x in range(BOARD_HEIGHT):
         line_to_output = str()
-        line_to_output = '|'
+        line_to_output = "|"
         print(horizontal_line)
         for y in range(BOARD_WIDTH):
             if board[y][x] is None:
-                line_to_output += ' '
-                line_to_output += '|'
+                line_to_output += " "
+                line_to_output += "|"
             else:
                 line_to_output += board[y][x]
-                line_to_output += '|'
-        #print(line_to_output)
+                line_to_output += "|"
+        # print(line_to_output)
         print(line_to_output)
     print(horizontal_line)
+
 
 # get column, go though x elements in column until not None, then place x-1
 # move is (x, y)
@@ -65,6 +67,7 @@ def make_move(board, move, player_symbol):
 
     return new_board_state
 
+
 # returns a move (x, y)
 # get a column from user, then return the row the token will drop to
 def get_move(board):
@@ -73,15 +76,16 @@ def get_move(board):
     x_move = None
     y_move = None
 
-    print("Available moves: ",', '.join(str(x) for x in valid_columns))
+    print("Available moves: ", ", ".join(str(x) for x in valid_columns))
 
     while col_selection not in valid_columns:
         col_selection = int(input("Enter your selection: "))
-    
+
     x_move = col_selection
     y_move = get_drop_row_index(board[x_move])
 
-    return(x_move, y_move)
+    return (x_move, y_move)
+
 
 # returns the index of the 'bottom' empty row
 # eg [None, None, None, None, 'O', 'O'] returns 3
@@ -89,14 +93,16 @@ def get_move(board):
 def get_drop_row_index(column):
     for i in range(BOARD_HEIGHT):
         if column[i] is not None:
-            return i-1
-    return BOARD_HEIGHT-1
+            return i - 1
+    return BOARD_HEIGHT - 1
+
 
 def check_if_column_full(col):
     for x in range(BOARD_HEIGHT):
         if col[x] == None:
             return False
     return True
+
 
 # return a list of non full columns
 def get_valid_columns(board):
@@ -106,6 +112,7 @@ def get_valid_columns(board):
             valid_columns.append(i)
     return valid_columns
 
+
 def check_if_board_full(board):
     for x in range(BOARD_HEIGHT):
         for y in range(BOARD_WIDTH):
@@ -113,21 +120,25 @@ def check_if_board_full(board):
                 return False
     return True
 
+
 # TODO implement
 # return True if there is a winner
 # return False if no winner
 # play_game can handle who has won
 def get_winner(board):
-    if (get_winner_vertical(board) or 
-    get_winner_horizontal(board) or 
-    get_winner_diagonal(board)):
+    if (
+        get_winner_vertical(board)
+        or get_winner_horizontal(board)
+        or get_winner_diagonal(board)
+    ):
         return True
     return False
+
 
 # TODO tidy up following get_winner_xxx() functions
 def get_winner_vertical(board):
     for y in range(BOARD_WIDTH):
-        # three possible sets for a vertical 4, x = [0, 1, 2, 3], 
+        # three possible sets for a vertical 4, x = [0, 1, 2, 3],
         # x = [1, 2, 3, 4], x = [2, 3, 4, 5]
         zero_start_x_list = list()
         one_start_x_list = list()
@@ -135,7 +146,7 @@ def get_winner_vertical(board):
 
         # TODO find better way of doing this
         # doing this in for loop for x in range(xxx):
-        # append(board[y][x+1]) append(board[y][x+2]) etc 
+        # append(board[y][x+1]) append(board[y][x+2]) etc
         # goes out of bounds
         zero_start_x_list.append(board[y][0])
         zero_start_x_list.append(board[y][1])
@@ -190,17 +201,18 @@ def get_winner_horizontal(board):
         elif len(set(one_start_y_list)) == 1 and one_start_y_list[0] is not None:
             return True
         elif len(set(two_start_y_list)) == 1 and two_start_y_list[0] is not None:
-            print('two')
+            print("two")
             return True
         elif len(set(three_start_y_list)) == 1 and three_start_y_list[0] is not None:
             return True
-    
+
     return False
+
 
 # TODO implement
 def get_winner_diagonal(board):
     lines = list()
-    
+
     left_diagonals = [
         [board[0][1], board[1][2], board[2][3], board[3][4]],
         [board[0][0], board[1][1], board[2][2], board[3][3]],
@@ -212,9 +224,9 @@ def get_winner_diagonal(board):
         [board[2][2], board[3][3], board[4][4], board[5][5]],
         [board[3][0], board[4][1], board[5][2], board[6][3]],
         [board[3][1], board[4][2], board[5][3], board[6][4]],
-        [board[3][2], board[4][3], board[5][4], board[6][5]],    
+        [board[3][2], board[4][3], board[5][4], board[6][5]],
     ]
-    
+
     right_diagonals = [
         [board[0][3], board[1][2], board[2][1], board[3][0]],
         [board[0][4], board[1][3], board[2][2], board[3][1]],
@@ -241,10 +253,7 @@ def get_winner_diagonal(board):
 
 
 def play_game(player1, player2):
-    players = [
-        (RED, player1),
-        (YELLOW, player2)
-    ]
+    players = [(RED, player1), (YELLOW, player2)]
 
     board = new_board()
     turn_number = 0
@@ -261,15 +270,16 @@ def play_game(player1, player2):
         if get_winner(board):
             # TODO un-comment following line once get_winner() implemented
             return current_player
-            #return 'Won'
+            # return 'Won'
 
         turn_number += 1
 
-    return 'Draw'
+    return "Draw"
+
 
 if __name__ == "__main__":
-    player1 = 'R'
-    player2 = 'Y'
+    player1 = "R"
+    player2 = "Y"
     b1 = new_board()
 
     winner = play_game(player1, player2)
