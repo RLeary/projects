@@ -32,6 +32,8 @@ while True:
     input_movement = input("Enter 'DIRECTION STEPS': ").split(" ")
     if not input_movement:
         break
+    # if not input is not breaking, split is returning a string of " " ,step
+    # goes out of bounds, as the string is [0] length
     if not len(input_movement) == 2:
         break
     direction = input_movement[0]
