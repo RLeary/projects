@@ -6,6 +6,21 @@
 # Use len() function to get the length of a string.
 
 
+def print_longest_string(string_one, string_two):
+    if len(string_one) > len(string_two):
+        print(string_one)
+    elif len(string_two) > len(string_one):
+        print(string_two)
+    else:
+        print(string_one)
+        print(string_two)
+
+
+print(print_longest_string("bleep", "boop"))
+print(print_longest_string("boop", "bloop"))
+print(print_longest_string("foo", "bar"))
+
+
 # given solutions
 """
 def printVal(s1,s2):
